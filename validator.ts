@@ -1,5 +1,11 @@
 import { $array, $boolean, $number, $object, $string } from "npm:lizod@0.2.6";
 
+/**
+ * Validate whether input is Space
+ *
+ * @param input validate target
+ * @return whether input is Space
+ */
 export const isSpace = $object({
   id: $number,
   uuid: $string,
@@ -22,6 +28,12 @@ const isFrame = $object({
   h: $number,
 });
 
+/**
+ * Validate whether input is Display
+ *
+ * @param input validate target
+ * @return whether input is Display
+ */
 export const isDisplay = $object({
   id: $number,
   uuid: $string,
@@ -30,6 +42,12 @@ export const isDisplay = $object({
   spaces: $array($number),
 });
 
+/**
+ * Validate whether input is Window
+ *
+ * @param input validate target
+ * @return whether input is Window
+ */
 export const isWindow = $object({
   id: $number,
   pid: $number,

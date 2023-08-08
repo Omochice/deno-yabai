@@ -4,6 +4,11 @@ import { $array } from "npm:lizod@0.2.6";
 import type { Display, Space, Window } from "./type.ts";
 import { isDisplay, isSpace, isWindow } from "./validator.ts";
 
+/**
+ * Get spaces
+ *
+ * @return Promise that return Space[] or Error
+ */
 export async function getSpaces(): Promise<Result<Space[], Error>> {
   try {
     const stdout = await $`yabai --message query --spaces`.json();
@@ -19,6 +24,11 @@ export async function getSpaces(): Promise<Result<Space[], Error>> {
   }
 }
 
+/**
+ * Get displays
+ *
+ * @return Promise that return Display[] or Error
+ */
 export async function getDisplays(): Promise<Result<Display[], Error>> {
   try {
     const stdout = await $`yabai --message query --displays`.json();
@@ -34,6 +44,11 @@ export async function getDisplays(): Promise<Result<Display[], Error>> {
   }
 }
 
+/**
+ * Get windows
+ *
+ * @return Promise that return Window[] or Error
+ */
 export async function getWindows(): Promise<Result<Window[], Error>> {
   try {
     const stdout = await $`yabai --message query --windows`.json();
