@@ -1,4 +1,4 @@
-import $ from "https://deno.land/x/dax@0.34.0/mod.ts";
+import { yabai } from "./core.ts";
 
 type Space = number | string;
 
@@ -10,14 +10,14 @@ type Space = number | string;
 export async function focus(
   target: Space | "recent" | "prev" | "next",
 ): Promise<void> {
-  await $`yabai --message space --focus ${target}`;
+  await yabai("space", ["--focus", `${target}`]);
 }
 
 /**
  * Create new space.
  */
 export async function create(): Promise<void> {
-  await $`yabai --message space --create`;
+  await yabai("space", ["--create"]);
 }
 
 /**
@@ -27,7 +27,7 @@ export async function create(): Promise<void> {
  * @param target destory target identifier
  */
 export async function destroy(target?: Space): Promise<void> {
-  await $`yabai --message space ${target ?? ""} --destroy`;
+  await yabai("space", [`${target ?? ""}`, "--destroy"]);
 }
 
 /**
@@ -41,7 +41,7 @@ export async function move(
   moveTo: "prev" | "next" | number,
   target?: Space,
 ): Promise<void> {
-  await $`yabai --message space ${target ?? ""} --move ${moveTo}`;
+  await yabai("space", [`${target ?? ""}`, "--move", `${moveTo}`]);
 }
 
 /**
@@ -52,7 +52,7 @@ export async function move(
  * @return target target space identifier
  */
 export async function send(display: number, target?: Space): Promise<void> {
-  await $`yabai --message space ${target ?? ""} --display ${display}`;
+  await yabai("space", [`${target ?? ""}`, "--display", `${display}`]);
 }
 
 /**
@@ -62,7 +62,7 @@ export async function send(display: number, target?: Space): Promise<void> {
  * @param labelName name
  */
 export async function label(target: Space, labelName: string): Promise<void> {
-  await $`yabai --message space ${target} --label ${labelName}`;
+  await yabai("space", [`${target}`, "--label", labelName]);
 }
 
 /**
@@ -72,7 +72,7 @@ export async function label(target: Space, labelName: string): Promise<void> {
  * @param target target space identifier
  */
 export async function balance(target?: Space): Promise<void> {
-  await $`yabai --message space ${target} --balance`;
+  await yabai("space", [`${target ?? ""}`, "--balance"]);
 }
 
 /**
@@ -83,7 +83,7 @@ export async function balance(target?: Space): Promise<void> {
  * @param target target space identifier
  */
 export async function flip(flipTo: "x" | "y", target?: Space): Promise<void> {
-  await $`yabai --message space ${target} --mirror ${flipTo}-axis`;
+  await yabai("space", [`${target ?? ""}`, "--mirror", `${flipTo}-axis`]);
 }
 
 /**
@@ -97,7 +97,7 @@ export async function rotate(
   degree: 90 | 180 | 270,
   target?: Space,
 ): Promise<void> {
-  await $`yabai --message space ${target ?? ""} --rotate ${degree}`;
+  await yabai("space", [`${target ?? ""}`, "--rotate", `${degree}`]);
 }
 
 /**
@@ -111,7 +111,7 @@ export async function changeLayout(
   layout: "bsp" | "float",
   target?: Space,
 ): Promise<void> {
-  await $`yabai --message space ${target ?? ""} --layout ${layout}`;
+  await yabai("space", [`${target ?? ""}`, "--layout", `${layout}`]);
 }
 
 /**
@@ -124,7 +124,7 @@ export async function toggle(
   toggleTo: "padding" | "gap",
   target?: Space,
 ): Promise<void> {
-  await $`yabai --message space ${target ?? ""} --toggle ${toggleTo}`;
+  await yabai("space", [`${target ?? ""}`, "--toggle", `${toggleTo}`]);
 }
 
 /**
@@ -152,7 +152,8 @@ export async function changePadding(
     normalizedPadding.right,
   ].map((e) => `${e}`)
     .join(":");
-  await $`yabai --message space ${target ?? ""} --padding ${query}`;
+
+  await yabai("space", [`${target ?? ""}`, "--padding", query]);
 }
 
 /**
@@ -169,5 +170,5 @@ export async function changeGap(
 ): Promise<void> {
   const normalizedType = type.substring(0, 3);
   const query = `${normalizedType}:${gap}`;
-  await $`yabai --message space ${target ?? ""} --padding ${query}`;
+  await yabai("space", [`${target ?? ""}`, "--gap", query]);
 }
