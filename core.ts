@@ -24,7 +24,7 @@ export async function yabai(
     "--message",
     category,
     ...command.filter((e) => e.length > 1),
-  ].join(" ");
+  ];
   try {
     const stdout = await $`${execCommand}`.text();
     return ok(stdout);
