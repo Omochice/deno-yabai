@@ -1,4 +1,11 @@
-import { $array, $boolean, $number, $object, $string } from "npm:lizod@0.2.6";
+import {
+  $array,
+  $boolean,
+  $number,
+  $object,
+  $opt,
+  $string,
+} from "npm:lizod@0.2.6";
 
 /**
  * Validate whether input is Space
@@ -78,4 +85,30 @@ export const isWindow = $object({
   "is-sticky": $boolean,
   "is-topmost": $boolean,
   "is-grabbed": $boolean,
+});
+
+/**
+ * Validate whether input is Rule
+ *
+ * @param input validate target
+ * @return whether input is Rule
+ */
+export const isRule = $object({
+  index: $number,
+  label: $string,
+  app: $string,
+  title: $string,
+  role: $string,
+  subrole: $string,
+  display: $number,
+  space: $number,
+  follow_space: $boolean,
+  opacity: $number,
+  manage: $opt($boolean),
+  sticky: $opt($boolean),
+  mouse_follows_focus: $opt($boolean),
+  layer: $string,
+  border: $opt($boolean),
+  "native-fullscreen": $opt($boolean),
+  grid: $string,
 });
