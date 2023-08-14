@@ -1,29 +1,9 @@
-import { err, ok, Result } from "npm:neverthrow@6.0.0";
+import { err, Result } from "npm:neverthrow@6.0.0";
 import { $array } from "npm:lizod@0.2.6";
 import type { Display, Space, Window } from "./type.ts";
 import { isDisplay, isSpace, isWindow } from "./validator.ts";
 import { yabai } from "./core.ts";
-
-export class JsonParseError extends Error {}
-export class ValidateError extends Error {}
-
-function parse<T>(
-  text: string,
-  validator: (data: unknown) => data is T,
-): Result<T, Error> {
-  try {
-    const json = JSON.parse(text);
-    if (validator(json)) {
-      return ok(json);
-    }
-    return err(new ValidateError("error"));
-  } catch (e: unknown) {
-    if (e instanceof Error) {
-      return err(e);
-    }
-    return err(new Error("unknown error", { cause: e }));
-  }
-}
+import { parse } from "./parse.ts";
 
 /**
  * Get spaces
