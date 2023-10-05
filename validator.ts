@@ -5,7 +5,7 @@ import {
   $object,
   $opt,
   $string,
-} from "npm:lizod@0.2.6";
+} from "npm:lizod@0.2.7";
 
 /**
  * Validate whether input is Space

@@ -1,4 +1,4 @@
-import { type Infer } from "npm:lizod@0.2.6";
+import { type Infer } from "npm:lizod@0.2.7";
 import { isDisplay, isRule, isSpace, isWindow } from "./validator.ts";
 
 export type Space = Infer<typeof isSpace>;
