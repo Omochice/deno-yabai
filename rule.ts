@@ -1,4 +1,4 @@
-import { err, Result } from "npm:neverthrow@6.0.0";
+import { err, Result } from "npm:neverthrow@6.1.0";
 import { $array } from "npm:lizod@0.2.7";
 import { yabai } from "./core.ts";
 import { parse } from "./parse.ts";
