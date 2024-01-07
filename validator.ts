@@ -44,7 +44,7 @@ const isFrame = $object({
 export const isDisplay = $object({
   id: $number,
   uuid: $string,
-  index: $string,
+  index: $number,
   frame: isFrame,
   spaces: $array($number),
 });
@@ -66,6 +66,7 @@ export const isWindow = $object({
   display: $number,
   space: $number,
   level: $number,
+  layer: $string,
   opacity: $number,
   "split-type": $string,
   "split-child": $string,
@@ -74,7 +75,6 @@ export const isWindow = $object({
   "can-resize": $boolean,
   "has-focus": $boolean,
   "has-shadow": $boolean,
-  "has-border": $boolean,
   "has-parent-zoom": $boolean,
   "has-fullscreen-zoom": $boolean,
   "is-native-fullscreen": $boolean,
@@ -83,7 +83,6 @@ export const isWindow = $object({
   "is-hidden": $boolean,
   "is-floating": $boolean,
   "is-sticky": $boolean,
-  "is-topmost": $boolean,
   "is-grabbed": $boolean,
 });
 
