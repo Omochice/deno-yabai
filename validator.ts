@@ -44,7 +44,7 @@ const isFrame = $object({
 export const isDisplay = $object({
   id: $number,
   uuid: $string,
-  index: $string,
+  index: $number,
   frame: isFrame,
   spaces: $array($number),
 });
