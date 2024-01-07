@@ -13,8 +13,6 @@ import * as Window from "https://deno.land/x/deno_yabai@$MODULE_VERSION/display.
 import * as Space from "https://deno.land/x/deno_yabai@$MODULE_VERSION/space.ts";
 // command for `yabai -m query`
 import * as Query from "https://deno.land/x/deno_yabai@$MODULE_VERSION/query.ts";
-// command for `yabai -m query`
-import * as Query from "https://deno.land/x/deno_yabai@$MODULE_VERSION/query.ts";
 // command for `yabai -m rule`
 import * as Rule from "https://deno.land/x/deno_yabai@$MODULE_VERSION/rule.ts";
 ```
