@@ -1,107 +1,177 @@
 import { ResultAsync } from "npm:neverthrow@6.1.0";
 import { yabai } from "./core.ts";
 import { ignore } from "./ignore.ts";
-
-type Space = number | string;
+import type { DisplaySel, Label, SpaceSel } from "./type.ts";
 
 /**
- * Focus the space.
+ * Focus the given space.
  *
- * @param target focus target
+ * @param query Command query
+ * @param query.scape Selected space
+ * @param query.target Target to focus
  */
 export function focus(
-  target: Space | "recent" | "prev" | "next",
+  { space, target }: {
+    space?: SpaceSel;
+    target: SpaceSel | "recent" | "prev" | "next";
+  },
 ): ResultAsync<void, Error> {
-  return yabai("space", ["--focus", `${target}`])
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--focus",
+    `${target}`,
+  ])
     .andThen(ignore);
 }
 
 /**
- * Create new space.
+ * Create new space on the given display.
+ * If none specified, use the display of the active space instead.
+ *
+ * @param query Command query
+ * @param query.space Selected space
+ * @param query.target Create target
  */
-export function create(): ResultAsync<void, Error> {
-  return yabai("space", ["--create"])
+export function create(
+  query?: {
+    space?: SpaceSel;
+    target?: DisplaySel;
+  },
+): ResultAsync<void, Error> {
+  return yabai("space", [
+    `${query?.space ?? ""}`,
+    "--create",
+    `${query?.target ?? ""}`,
+  ])
     .andThen(ignore);
 }
 
 /**
  * Destory specified space.
- * if `target` is not pass, destory current space.
+ * If none specified, use the selected space instead.
  *
- * @param target destory target identifier
+ * @param query Command query
+ * @param query.space Selected space
+ * @param query.target Destory target identifier
  */
-export function destroy(target?: Space): ResultAsync<void, Error> {
-  return yabai("space", [`${target ?? ""}`, "--destroy"])
+export function destroy(
+  query?: {
+    space?: SpaceSel;
+    target?: SpaceSel;
+  },
+): ResultAsync<void, Error> {
+  return yabai("space", [
+    `${query?.space ?? ""}`,
+    "--destroy",
+    `${query?.target ?? ""}`,
+  ])
     .andThen(ignore);
 }
 
 /**
- * Move some space to other index.
- * if `target` is not pass, move current space.
+ * Move position of the selected space to the position of the given space.
+ * The selected space and given space must both belong to the same display.
  *
- * @param moveTo index to move
- * @param target target space identifier
+ * @param space Selected space
+ * @param target Target space identifier
  */
 export function move(
-  moveTo: "prev" | "next" | number,
-  target?: Space,
+  { space, target }: {
+    space?: SpaceSel;
+    target: SpaceSel;
+  },
 ): ResultAsync<void, Error> {
-  return yabai("space", [`${target ?? ""}`, "--move", `${moveTo}`])
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--move",
+    `${target}`,
+  ])
     .andThen(ignore);
 }
 
 /**
- * Send space to some display.
- * if `target` is not pass, use current space.
+ * Swap the selected space with the given space.
+ * The selected space and given space must both belong to the same display.
  *
- * @param display index of display
- * @param target target space identifier
+ * @param space Selected space
+ * @param target target space indentifier
+ */
+export function swap(
+  { space, target }: {
+    space?: SpaceSel;
+    target: SpaceSel;
+  },
+): ResultAsync<void, Error> {
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--swap",
+    `${target}`,
+  ])
+    .andThen(ignore);
+}
+
+/**
+ * Remove the given space.
+ * If none specified, use the selected space instead.
+ *
+ * @param space Selected space
+ * @param target Target space identifier
  */
 export function send(
-  display: number,
-  target?: Space,
+  { space, target }: {
+    space?: SpaceSel;
+    target: DisplaySel;
+  },
 ): ResultAsync<void, Error> {
-  return yabai("space", [`${target ?? ""}`, "--display", `${display}`])
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--display",
+    `${target}`,
+  ])
     .andThen(ignore);
 }
 
 /**
- * Label the space.
+ * Adjust the split ratios on the selected space so that all windows along the given axis occupy the same area.
+ * If no axis is specified, use both.
  *
- * @param target target space identifier
- * @param labelName name
+ * @param query Command query
+ * @param query.space Selected space
+ * @param query.axis The way to balance
  */
-export function label(
-  target: Space,
-  labelName: string,
+export function balance(
+  query?: {
+    space?: SpaceSel;
+    axis?: "x" | "y";
+  },
 ): ResultAsync<void, Error> {
-  return yabai("space", [`${target}`, "--label", labelName])
+  const axis = query?.axis == null ? "" : `${query.axis}-axis`;
+  return yabai("space", [
+    `${query?.space ?? ""}`,
+    "--balance",
+    `${axis}`,
+  ])
     .andThen(ignore);
 }
 
 /**
- * Balance out all windows both horizontally and vertically to occupy the same space.
- * If target is not specified, balance current space.
- *
- * @param target target space identifier
- */
-export function balance(target?: Space): ResultAsync<void, Error> {
-  return yabai("space", [`${target ?? ""}`, "--balance"])
-    .andThen(ignore);
-}
-
-/**
- * Flip the tree horizontally.
+ * Flip the tree of the selected space along the given axis.
  * If target is not specified, flip current space.
  *
+ * @param space Selected space
  * @param flipTo The way to flip
- * @param target target space identifier
  */
 export function flip(
-  flipTo: "x" | "y",
-  target?: Space,
+  { space, flipTo }: {
+    space?: SpaceSel;
+    flipTo: "x" | "y";
+  },
 ): ResultAsync<void, Error> {
-  return yabai("space", [`${target ?? ""}`, "--mirror", `${flipTo}-axis`])
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--mirror",
+    `${flipTo}-axis`,
+  ])
     .andThen(ignore);
 }
 
@@ -109,57 +179,36 @@ export function flip(
  * Rotate the window tree clock-wise.
  * If target is not specified, rotate current space.
  *
- * @param degree degree of rotate
- * @param target target space identifier
+ * @param space Selected space
+ * @param degree Degree of rotate
  */
 export function rotate(
-  degree: 90 | 180 | 270,
-  target?: Space,
+  { space, degree }: {
+    space?: SpaceSel;
+    degree: 90 | 180 | 270;
+  },
 ): ResultAsync<void, Error> {
-  return yabai("space", [`${target ?? ""}`, "--rotate", `${degree}`])
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--rotate",
+    `${degree}`,
+  ])
     .andThen(ignore);
 }
 
 /**
- * Set layout of the space.
- * If target is not specified, set layout to current space.
- *
- * @param layout "bsp" or "float"
- * @param target target space identifier
- */
-export function changeLayout(
-  layout: "bsp" | "float",
-  target?: Space,
-): ResultAsync<void, Error> {
-  return yabai("space", [`${target ?? ""}`, "--layout", `${layout}`])
-    .andThen(ignore);
-}
-
-/**
- * Toggle padding | gap.
- *
- * @param toggleTo toggle target name
- * @param target: target space identifier
- */
-export function toggle(
-  toggleTo: "padding" | "gap",
-  target?: Space,
-): ResultAsync<void, Error> {
-  return yabai("space", [`${target ?? ""}`, "--toggle", `${toggleTo}`])
-    .andThen(ignore);
-}
-
-/**
- * Change padding of target space.
+ * Padding added at the sides of the selected space.
  *
  * @param type "relative" is adding to current padding, "absolute" is setting as new.
  * @param padding padding size. If yout omited some sides, set 0 as default.
- * @param target target space identifier
+ * @param space Selected space
  */
 export function changePadding(
-  type: "relative" | "absolute",
-  padding: { top?: number; bottom?: number; left?: number; right?: number },
-  target?: Space,
+  { type, padding, space }: {
+    type: "relative" | "absolute";
+    padding: { top?: number; bottom?: number; left?: number; right?: number };
+    space?: SpaceSel;
+  },
 ): ResultAsync<void, Error> {
   const normalizedType = type.substring(0, 3);
   const normalizedPadding = {
@@ -175,24 +224,92 @@ export function changePadding(
   ].map((e) => `${e}`)
     .join(":");
 
-  return yabai("space", [`${target ?? ""}`, "--padding", query])
+  return yabai("space", [`${space ?? ""}`, "--padding", query])
     .andThen(ignore);
 }
 
 /**
- * Change gap of target space.
+ * Size of the gap that separates windows on the selected space.
  *
  * @param type "relative" is adding to current padding, "absolute" is setting as new.
- * @param gap gap size.
- * @param target target space identifier
+ * @param gap Gap size.
+ * @param space Selected space
  */
 export function changeGap(
-  type: "relative" | "absolute",
-  gap: number,
-  target?: Space,
+  { type, gap, space }: {
+    type: "relative" | "absolute";
+    gap: number;
+    space?: SpaceSel;
+  },
 ): ResultAsync<void, Error> {
   const normalizedType = type.substring(0, 3);
   const query = `${normalizedType}:${gap}`;
-  return yabai("space", [`${target ?? ""}`, "--gap", query])
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--gap",
+    query,
+  ])
+    .andThen(ignore);
+}
+
+/**
+ * Toggle space setting on or off for the selected space.
+ *
+ * @param toggleTo Toggle target name
+ * @param space Selected space
+ */
+export function toggle(
+  { toggleTo, space }: {
+    toggleTo: "padding" | "gap";
+    space?: SpaceSel;
+  },
+): ResultAsync<void, Error> {
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--toggle",
+    `${toggleTo}`,
+  ])
+    .andThen(ignore);
+}
+
+/**
+ * Set the layout of the selected space.
+ * If target is not specified, set layout to current space.
+ *
+ * @param layout "bsp" or "float"
+ * @param space Selected space
+ */
+export function changeLayout(
+  { layout, space }: {
+    layout: "bsp" | "stack" | "float";
+    space?: SpaceSel;
+  },
+): ResultAsync<void, Error> {
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--layout",
+    `${layout}`,
+  ])
+    .andThen(ignore);
+}
+
+/**
+ * Label the selected space, allowing that label to be used as an alias in commands that take a `target` parameter.
+ * If the command is called without an argument it will try to remove a previously assigned label.
+ *
+ * @param space target space identifier
+ * @param labelName name
+ */
+export function label(
+  { space, labelName }: {
+    space?: SpaceSel;
+    labelName: Label;
+  },
+): ResultAsync<void, Error> {
+  return yabai("space", [
+    `${space ?? ""}`,
+    "--label",
+    labelName,
+  ])
     .andThen(ignore);
 }
