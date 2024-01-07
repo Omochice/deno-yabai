@@ -1,14 +1,24 @@
 import { ok, ResultAsync } from "npm:neverthrow@6.1.0";
 import { yabai } from "./core.ts";
+import type { DisplaySel } from "./type.ts";
 
 /**
- * Focus the display
+ * Focus the given display.
  *
- * @param target display identifier
+ * @param query Command query
+ * @param query.display Selceted display
+ * @param query.target Display identifier
  */
 export function focus(
-  target: "recent" | "prev" | "next" | number,
+  query: {
+    display?: DisplaySel;
+    target: DisplaySel;
+  },
 ): ResultAsync<void, Error> {
-  return yabai("display", ["--forcus", `${target}`])
+  return yabai("display", [
+    `${query?.display ?? ""}`,
+    "--focus",
+    `${query.target}`,
+  ])
     .andThen(() => ok(undefined));
 }
