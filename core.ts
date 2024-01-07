@@ -1,5 +1,6 @@
-import $ from "https://deno.land/x/dax@0.36.0/mod.ts";
 import { ResultAsync } from "npm:neverthrow@6.1.0";
+
+const decoder = new TextDecoder();
 
 export type Category =
   | "display"
@@ -19,13 +20,19 @@ export function yabai(
   category: Category,
   command: string[],
 ): ResultAsync<string, Error> {
-  const execCommand = [
-    "yabai",
-    "--message",
-    category,
-    ...command.filter((e) => e.length > 1),
-  ];
-  return ResultAsync.fromPromise($`${execCommand}`.text(), convertToError());
+  const com = new Deno.Command("yabai", {
+    args: [
+      "--message",
+      category,
+      ...command.filter((e) => e.length > 1),
+    ],
+    stdout: "piped",
+    stderr: "piped",
+  });
+  return ResultAsync.fromPromise(
+    com.output().then((e) => decoder.decode(e.stdout)),
+    convertToError(),
+  );
 }
 
 function convertToError(msg = "unknown error") {
