@@ -1,4 +1,6 @@
+import { ResultAsync } from "npm:neverthrow@6.1.0";
 import { yabai } from "./core.ts";
+import { ignore } from "./ignore.ts";
 
 type Space = number | string;
 
@@ -7,17 +9,19 @@ type Space = number | string;
  *
  * @param target focus target
  */
-export async function focus(
+export function focus(
   target: Space | "recent" | "prev" | "next",
-): Promise<void> {
-  await yabai("space", ["--focus", `${target}`]);
+): ResultAsync<void, Error> {
+  return yabai("space", ["--focus", `${target}`])
+    .andThen(ignore);
 }
 
 /**
  * Create new space.
  */
-export async function create(): Promise<void> {
-  await yabai("space", ["--create"]);
+export function create(): ResultAsync<void, Error> {
+  return yabai("space", ["--create"])
+    .andThen(ignore);
 }
 
 /**
@@ -26,8 +30,9 @@ export async function create(): Promise<void> {
  *
  * @param target destory target identifier
  */
-export async function destroy(target?: Space): Promise<void> {
-  await yabai("space", [`${target ?? ""}`, "--destroy"]);
+export function destroy(target?: Space): ResultAsync<void, Error> {
+  return yabai("space", [`${target ?? ""}`, "--destroy"])
+    .andThen(ignore);
 }
 
 /**
@@ -37,11 +42,12 @@ export async function destroy(target?: Space): Promise<void> {
  * @param moveTo index to move
  * @param target target space identifier
  */
-export async function move(
+export function move(
   moveTo: "prev" | "next" | number,
   target?: Space,
-): Promise<void> {
-  await yabai("space", [`${target ?? ""}`, "--move", `${moveTo}`]);
+): ResultAsync<void, Error> {
+  return yabai("space", [`${target ?? ""}`, "--move", `${moveTo}`])
+    .andThen(ignore);
 }
 
 /**
@@ -49,10 +55,14 @@ export async function move(
  * if `target` is not pass, use current space.
  *
  * @param display index of display
- * @return target target space identifier
+ * @param target target space identifier
  */
-export async function send(display: number, target?: Space): Promise<void> {
-  await yabai("space", [`${target ?? ""}`, "--display", `${display}`]);
+export function send(
+  display: number,
+  target?: Space,
+): ResultAsync<void, Error> {
+  return yabai("space", [`${target ?? ""}`, "--display", `${display}`])
+    .andThen(ignore);
 }
 
 /**
@@ -61,8 +71,12 @@ export async function send(display: number, target?: Space): Promise<void> {
  * @param target target space identifier
  * @param labelName name
  */
-export async function label(target: Space, labelName: string): Promise<void> {
-  await yabai("space", [`${target}`, "--label", labelName]);
+export function label(
+  target: Space,
+  labelName: string,
+): ResultAsync<void, Error> {
+  return yabai("space", [`${target}`, "--label", labelName])
+    .andThen(ignore);
 }
 
 /**
@@ -71,8 +85,9 @@ export async function label(target: Space, labelName: string): Promise<void> {
  *
  * @param target target space identifier
  */
-export async function balance(target?: Space): Promise<void> {
-  await yabai("space", [`${target ?? ""}`, "--balance"]);
+export function balance(target?: Space): ResultAsync<void, Error> {
+  return yabai("space", [`${target ?? ""}`, "--balance"])
+    .andThen(ignore);
 }
 
 /**
@@ -82,8 +97,12 @@ export async function balance(target?: Space): Promise<void> {
  * @param flipTo The way to flip
  * @param target target space identifier
  */
-export async function flip(flipTo: "x" | "y", target?: Space): Promise<void> {
-  await yabai("space", [`${target ?? ""}`, "--mirror", `${flipTo}-axis`]);
+export function flip(
+  flipTo: "x" | "y",
+  target?: Space,
+): ResultAsync<void, Error> {
+  return yabai("space", [`${target ?? ""}`, "--mirror", `${flipTo}-axis`])
+    .andThen(ignore);
 }
 
 /**
@@ -93,11 +112,12 @@ export async function flip(flipTo: "x" | "y", target?: Space): Promise<void> {
  * @param degree degree of rotate
  * @param target target space identifier
  */
-export async function rotate(
+export function rotate(
   degree: 90 | 180 | 270,
   target?: Space,
-): Promise<void> {
-  await yabai("space", [`${target ?? ""}`, "--rotate", `${degree}`]);
+): ResultAsync<void, Error> {
+  return yabai("space", [`${target ?? ""}`, "--rotate", `${degree}`])
+    .andThen(ignore);
 }
 
 /**
@@ -107,11 +127,12 @@ export async function rotate(
  * @param layout "bsp" or "float"
  * @param target target space identifier
  */
-export async function changeLayout(
+export function changeLayout(
   layout: "bsp" | "float",
   target?: Space,
-): Promise<void> {
-  await yabai("space", [`${target ?? ""}`, "--layout", `${layout}`]);
+): ResultAsync<void, Error> {
+  return yabai("space", [`${target ?? ""}`, "--layout", `${layout}`])
+    .andThen(ignore);
 }
 
 /**
@@ -120,11 +141,12 @@ export async function changeLayout(
  * @param toggleTo toggle target name
  * @param target: target space identifier
  */
-export async function toggle(
+export function toggle(
   toggleTo: "padding" | "gap",
   target?: Space,
-): Promise<void> {
-  await yabai("space", [`${target ?? ""}`, "--toggle", `${toggleTo}`]);
+): ResultAsync<void, Error> {
+  return yabai("space", [`${target ?? ""}`, "--toggle", `${toggleTo}`])
+    .andThen(ignore);
 }
 
 /**
@@ -134,11 +156,11 @@ export async function toggle(
  * @param padding padding size. If yout omited some sides, set 0 as default.
  * @param target target space identifier
  */
-export async function changePadding(
+export function changePadding(
   type: "relative" | "absolute",
   padding: { top?: number; bottom?: number; left?: number; right?: number },
   target?: Space,
-): Promise<void> {
+): ResultAsync<void, Error> {
   const normalizedType = type.substring(0, 3);
   const normalizedPadding = {
     ...{ top: 0, botton: 0, left: 0, right: 0 },
@@ -153,7 +175,8 @@ export async function changePadding(
   ].map((e) => `${e}`)
     .join(":");
 
-  await yabai("space", [`${target ?? ""}`, "--padding", query]);
+  return yabai("space", [`${target ?? ""}`, "--padding", query])
+    .andThen(ignore);
 }
 
 /**
@@ -163,12 +186,13 @@ export async function changePadding(
  * @param gap gap size.
  * @param target target space identifier
  */
-export async function changeGap(
+export function changeGap(
   type: "relative" | "absolute",
   gap: number,
   target?: Space,
-): Promise<void> {
+): ResultAsync<void, Error> {
   const normalizedType = type.substring(0, 3);
   const query = `${normalizedType}:${gap}`;
-  await yabai("space", [`${target ?? ""}`, "--gap", query]);
+  return yabai("space", [`${target ?? ""}`, "--gap", query])
+    .andThen(ignore);
 }
