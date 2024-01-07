@@ -24,7 +24,7 @@ export function yabai(
     args: [
       "--message",
       category,
-      ...command.filter((e) => e.length > 1),
+      ...command.filter((e) => e !== ""),
     ],
     stdout: "piped",
     stderr: "piped",
