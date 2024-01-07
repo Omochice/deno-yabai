@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/Omochice/deno-yabai/compare/v0.1.0...v0.1.1) (2024-01-07)
+
+
+### Bug Fixes
+
+* fix some query type ([#21](https://github.com/Omochice/deno-yabai/issues/21)) ([b389c95](https://github.com/Omochice/deno-yabai/commit/b389c9577a7d74a4181b2737cff89519dbf07543))
+
 ## 0.1.0 (2024-01-07)
 
 
