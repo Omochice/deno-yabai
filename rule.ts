@@ -1,4 +1,4 @@
-import { err, Result } from "npm:neverthrow@6.1.0";
+import { ResultAsync } from "npm:neverthrow@6.1.0";
 import { $array } from "npm:lizod@0.2.7";
 import { yabai } from "./core.ts";
 import { parse } from "./parse.ts";
@@ -14,10 +14,9 @@ export async function remove() {}
  *
  * @return Promise that return Rule[] or Error
  */
-export async function list(): Promise<Result<Rule[], Error>> {
-  const result = await yabai("rule", ["--list"]);
-  if (result.isErr()) {
-    return err(result.error);
-  }
-  return parse(result.value, $array(isRule));
+export function list(): ResultAsync<Rule[], Error> {
+  return yabai("rule", ["--list"])
+    .andThen((txt) => {
+      return parse(txt, $array(isRule));
+    });
 }

@@ -1,5 +1,5 @@
 import $ from "https://deno.land/x/dax@0.36.0/mod.ts";
-import { err, ok, Result } from "npm:neverthrow@6.1.0";
+import { ResultAsync } from "npm:neverthrow@6.1.0";
 
 export type Category =
   | "display"
@@ -15,23 +15,24 @@ export type Category =
  * @param category command category name
  * @param command command body
  */
-export async function yabai(
+export function yabai(
   category: Category,
   command: string[],
-): Promise<Result<string, Error>> {
+): ResultAsync<string, Error> {
   const execCommand = [
     "yabai",
     "--message",
     category,
     ...command.filter((e) => e.length > 1),
   ];
-  try {
-    const stdout = await $`${execCommand}`.text();
-    return ok(stdout);
-  } catch (e: unknown) {
+  return ResultAsync.fromPromise($`${execCommand}`.text(), convertToError());
+}
+
+function convertToError(msg = "unknown error") {
+  return (e: unknown): Error => {
     if (e instanceof Error) {
-      return err(e);
+      return e;
     }
-    return err(new Error("unknown error", { cause: e }));
-  }
+    return new Error(msg, { cause: e });
+  };
 }

@@ -1,3 +1,4 @@
+import { ok, ResultAsync } from "npm:neverthrow@6.1.0";
 import { yabai } from "./core.ts";
 
 /**
@@ -5,6 +6,9 @@ import { yabai } from "./core.ts";
  *
  * @param target display identifier
  */
-export async function focus(target: "recent" | "prev" | "next" | number) {
-  await yabai("display", ["--forcus", `${target}`]);
+export function focus(
+  target: "recent" | "prev" | "next" | number,
+): ResultAsync<void, Error> {
+  return yabai("display", ["--forcus", `${target}`])
+    .andThen(() => ok(undefined));
 }

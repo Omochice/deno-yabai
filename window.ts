@@ -1,4 +1,6 @@
+import { ResultAsync } from "npm:neverthrow@6.1.0";
 import { yabai } from "./core.ts";
+import { ignore } from "./ignore.ts";
 
 type Direction =
   | "north"
@@ -26,11 +28,12 @@ type Place =
  * @param place relative place with target
  * @param target target window identifier
  */
-export async function focus(
+export function focus(
   place: Place,
   target?: number,
-): Promise<void> {
-  await yabai("window", [`${target ?? ""}`, "--focus", place]);
+): ResultAsync<void, Error> {
+  return yabai("window", [`${target ?? ""}`, "--focus", place])
+    .andThen(ignore);
 }
 
 /**
@@ -40,11 +43,12 @@ export async function focus(
  * @param place relative place with target
  * @param target target window identifier
  */
-export async function swap(
+export function swap(
   place: Place,
   target?: number,
-): Promise<void> {
-  await yabai("window", [`${target ?? ""}`, "--swap", place]);
+): ResultAsync<void, Error> {
+  return yabai("window", [`${target ?? ""}`, "--swap", place])
+    .andThen(ignore);
 }
 
 /**
@@ -54,11 +58,12 @@ export async function swap(
  * @param place relative place with target
  * @param target target window identifier
  */
-export async function warp(
+export function warp(
   place: Place,
   target?: number,
-): Promise<void> {
-  await yabai("window", [`${target ?? ""}`, "--warp", place]);
+): ResultAsync<void, Error> {
+  return yabai("window", [`${target ?? ""}`, "--warp", place])
+    .andThen(ignore);
 }
 
 /**
@@ -69,15 +74,16 @@ export async function warp(
  * @param coordinate coordinate to move
  * @param target target window identifier
  */
-export async function move(
+export function move(
   type: "relative" | "absolute",
   coordinate: { x?: number; y?: number },
   target?: number,
-): Promise<void> {
+): ResultAsync<void, Error> {
   const normalizedType = type.substring(0, 3);
   const { x, y } = { ...{ x: 0, y: 0 }, ...coordinate };
   const query = `${normalizedType}:${x}:${y}`;
-  await yabai("window", [`${target ?? ""}`, "--move", query]);
+  return yabai("window", [`${target ?? ""}`, "--move", query])
+    .andThen(ignore);
 }
 
 /**
@@ -88,7 +94,7 @@ export async function move(
  * @param size size to increment or decrement
  * @param target target window identifier
  */
-export async function resize(
+export function resize(
   type:
     | "absolute"
     | "top"
@@ -101,11 +107,12 @@ export async function resize(
     | "bottom_right",
   size: { x?: number; y?: number },
   target?: number,
-): Promise<void> {
+): ResultAsync<void, Error> {
   const normalizedType = type === "absolute" ? type.substring(0, 3) : type;
   const { x, y } = { ...{ x: 0, y: 0 }, ...size };
   const query = `${normalizedType}:${x}:${y}`;
-  await yabai("window", [`${target ?? ""}`, "--resize", query]);
+  return yabai("window", [`${target ?? ""}`, "--resize", query])
+    .andThen(ignore);
 }
 
 /**
@@ -115,7 +122,7 @@ export async function resize(
  * @param query grid query
  * @param target target window identifier
  */
-export async function grid(
+export function grid(
   query: {
     rows: number;
     cols: number;
@@ -125,7 +132,7 @@ export async function grid(
     height: number;
   },
   target?: number,
-): Promise<void> {
+): ResultAsync<void, Error> {
   const q = [
     query.rows,
     query.cols,
@@ -135,7 +142,8 @@ export async function grid(
     query.height,
   ].map((e) => e.toString())
     .join(":");
-  await yabai("window", [`${target ?? ""}`, "--resize", q]);
+  return yabai("window", [`${target ?? ""}`, "--resize", q])
+    .andThen(ignore);
 }
 
 /**
@@ -146,12 +154,13 @@ export async function grid(
  * @aparm query move destination query
  * @param target target window identifier
  */
-export async function relocate(
+export function relocate(
   type: "display" | "space",
   query: Adjacent | Edge | number,
   target?: number,
-): Promise<void> {
-  await yabai("window", [`${target ?? ""}`, `--${type}`, query.toString()]);
+): ResultAsync<void, Error> {
+  return yabai("window", [`${target ?? ""}`, `--${type}`, query.toString()])
+    .andThen(ignore);
 }
 
 /**
@@ -161,11 +170,12 @@ export async function relocate(
  * @param type zoom type
  * @param target target window identifier
  */
-export async function zoom(
+export function zoom(
   type: "zoom-parent" | "zoom-fullscreen" | "native-fullscreen",
   target?: number,
-): Promise<void> {
-  await yabai("window", [`${target ?? ""}`, "--toggle", type]);
+): ResultAsync<void, Error> {
+  return yabai("window", [`${target ?? ""}`, "--toggle", type])
+    .andThen(ignore);
 }
 
 /**
@@ -174,10 +184,11 @@ export async function zoom(
  *
  * @param target target window identifier
  */
-export async function toggleSplit(
+export function toggleSplit(
   target?: number,
-): Promise<void> {
-  await yabai("window", [`${target ?? ""}`, "--toggle", "split"]);
+): ResultAsync<void, Error> {
+  return yabai("window", [`${target ?? ""}`, "--toggle", "split"])
+    .andThen(ignore);
 }
 
 /**
@@ -187,9 +198,10 @@ export async function toggleSplit(
  * @param type property type
  * @param target target window identifier
  */
-export async function toogleWindowProperty(
+export function toogleWindowProperty(
   type: "float" | "border" | "sticky",
   target?: number,
-): Promise<void> {
-  await yabai("window", [`${target ?? ""}`, "--toggle", type]);
+): ResultAsync<void, Error> {
+  return yabai("window", [`${target ?? ""}`, "--toggle", type])
+    .andThen(ignore);
 }

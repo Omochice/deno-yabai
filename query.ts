@@ -1,4 +1,4 @@
-import { err, Result } from "npm:neverthrow@6.1.0";
+import { ResultAsync } from "npm:neverthrow@6.1.0";
 import { $array } from "npm:lizod@0.2.7";
 import type { Display, Space, Window } from "./type.ts";
 import { isDisplay, isSpace, isWindow } from "./validator.ts";
@@ -10,12 +10,11 @@ import { parse } from "./parse.ts";
  *
  * @return Promise that return Space[] or Error
  */
-export async function getSpaces(): Promise<Result<Space[], Error>> {
-  const result = await yabai("query", ["--spaces"]);
-  if (result.isErr()) {
-    return err(result.error);
-  }
-  return parse(result.value, $array(isSpace));
+export function getSpaces(): ResultAsync<Space[], Error> {
+  return yabai("query", ["--spaces"])
+    .andThen((txt) => {
+      return parse(txt, $array(isSpace));
+    });
 }
 
 /**
@@ -23,12 +22,11 @@ export async function getSpaces(): Promise<Result<Space[], Error>> {
  *
  * @return Promise that return Display[] or Error
  */
-export async function getDisplays(): Promise<Result<Display[], Error>> {
-  const result = await yabai("query", ["--displays"]);
-  if (result.isErr()) {
-    return err(result.error);
-  }
-  return parse(result.value, $array(isDisplay));
+export function getDisplays(): ResultAsync<Display[], Error> {
+  return yabai("query", ["--displays"])
+    .andThen((txt) => {
+      return parse(txt, $array(isDisplay));
+    });
 }
 
 /**
@@ -36,10 +34,9 @@ export async function getDisplays(): Promise<Result<Display[], Error>> {
  *
  * @return Promise that return Window[] or Error
  */
-export async function getWindows(): Promise<Result<Window[], Error>> {
-  const result = await yabai("query", ["--windows"]);
-  if (result.isErr()) {
-    return err(result.error);
-  }
-  return parse(result.value, $array(isWindow));
+export function getWindows(): ResultAsync<Window[], Error> {
+  return yabai("query", ["--windows"])
+    .andThen((txt) => {
+      return parse(txt, $array(isWindow));
+    });
 }
