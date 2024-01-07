@@ -1,13 +1,19 @@
-import { ResultAsync } from "npm:neverthrow@6.1.0";
+import { errAsync, ResultAsync } from "npm:neverthrow@6.1.0";
 import { $array } from "npm:lizod@0.2.7";
 import { yabai } from "./core.ts";
 import { parse } from "./parse.ts";
 import { isRule } from "./validator.ts";
 import type { Rule } from "./type.ts";
 
-export async function add() {}
+class NotImplementError extends Error {}
 
-export async function remove() {}
+export function add(): ResultAsync<never, Error> {
+  return errAsync(new NotImplementError("add is not implmented yet"));
+}
+
+export function remove(): ResultAsync<never, Error> {
+  return errAsync(new NotImplementError("remove is not implmented yet"));
+}
 
 /**
  * List registered rules.
