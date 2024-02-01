@@ -26,7 +26,7 @@ export const isSpace = $object({
   "has-focus": $boolean,
   "is-visible": $boolean,
   "is-native-fullscreen": $boolean,
-});
+}, false);
 
 const isFrame = $object({
   x: $number,
@@ -63,10 +63,13 @@ export const isWindow = $object({
   frame: isFrame,
   role: $string,
   subrole: $string,
+  "root-window": $boolean,
   display: $number,
   space: $number,
   level: $number,
+  "sub-level": $number,
   layer: $string,
+  "sub-layer": $string,
   opacity: $number,
   "split-type": $string,
   "split-child": $string,
@@ -84,7 +87,7 @@ export const isWindow = $object({
   "is-floating": $boolean,
   "is-sticky": $boolean,
   "is-grabbed": $boolean,
-});
+}, false);
 
 /**
  * Validate whether input is Rule
@@ -110,4 +113,4 @@ export const isRule = $object({
   border: $opt($boolean),
   "native-fullscreen": $opt($boolean),
   grid: $string,
-});
+}, false);
