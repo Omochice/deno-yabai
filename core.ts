@@ -1,4 +1,4 @@
-import { ResultAsync } from "npm:neverthrow@6.1.0";
+import { err, ok, ResultAsync } from "npm:neverthrow@6.1.0";
 
 const decoder = new TextDecoder();
 
@@ -29,10 +29,13 @@ export function yabai(
     stdout: "piped",
     stderr: "piped",
   });
-  return ResultAsync.fromPromise(
-    com.output().then((e) => decoder.decode(e.stdout)),
-    convertToError(),
-  );
+  return ResultAsync.fromPromise(com.output(), convertToError())
+    .andThen(
+      ({ success, stdout, stderr }) =>
+        success
+          ? ok(decoder.decode(stdout))
+          : err(new Error(decoder.decode(stderr))),
+    );
 }
 
 function convertToError(msg = "unknown error") {
