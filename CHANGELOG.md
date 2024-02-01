@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/Omochice/deno-yabai/compare/v0.1.2...v0.1.3) (2024-02-01)
+
+
+### Bug Fixes
+
+* if command failed, return error result ([#26](https://github.com/Omochice/deno-yabai/issues/26)) ([1b224d4](https://github.com/Omochice/deno-yabai/commit/1b224d4adde7f291c5adfdb42659c93024bab57a))
+
 ## [0.1.2](https://github.com/Omochice/deno-yabai/compare/v0.1.1...v0.1.2) (2024-01-07)
 
 
