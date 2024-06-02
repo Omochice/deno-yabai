@@ -1,4 +1,4 @@
-import { ok, ResultAsync } from "npm:neverthrow@6.2.1";
+import { ok, ResultAsync } from "npm:neverthrow@6.2.2";
 import { yabai } from "./core.ts";
 import type { DisplaySel } from "./type.ts";
 

@@ -1,4 +1,4 @@
-import { err, ok, ResultAsync } from "npm:neverthrow@6.2.1";
+import { err, ok, ResultAsync } from "npm:neverthrow@6.2.2";
 
 const decoder = new TextDecoder();
 
