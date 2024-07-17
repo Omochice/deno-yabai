@@ -1,4 +1,4 @@
-import { Ok, ok } from "npm:neverthrow@6.2.2";
+import { Ok, ok } from "npm:neverthrow@7.0.0";
 
 /**
  * Ignore result value
