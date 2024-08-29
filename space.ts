@@ -1,4 +1,4 @@
-import { ResultAsync } from "npm:neverthrow@7.0.1";
+import { ResultAsync } from "npm:neverthrow@7.1.0";
 import { yabai } from "./core.ts";
 import { ignore } from "./ignore.ts";
 import type { DisplaySel, Label, SpaceSel } from "./type.ts";
