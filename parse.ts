@@ -1,4 +1,4 @@
-import { err, ok, Result } from "npm:neverthrow@7.2.0";
+import { err, ok, Result } from "npm:neverthrow@8.0.0";
 
 export class ValidateError extends Error {}
 

@@ -1,4 +1,4 @@
-import { errAsync, ResultAsync } from "npm:neverthrow@7.2.0";
+import { errAsync, ResultAsync } from "npm:neverthrow@8.0.0";
 import { $array } from "npm:lizod@0.2.7";
 import { yabai } from "./core.ts";
 import { parse } from "./parse.ts";
