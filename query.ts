@@ -1,4 +1,4 @@
-import { ResultAsync } from "npm:neverthrow@8.0.0";
+import { ResultAsync } from "npm:neverthrow@8.1.0";
 import { $array } from "npm:lizod@0.2.7";
 import type { Display, Space, Window } from "./type.ts";
 import { isDisplay, isSpace, isWindow } from "./validator.ts";
